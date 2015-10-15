@@ -13,6 +13,9 @@ public class ApplicationUI extends JFrame{
 	Controller ctrl;
 	public static int windowWidth = 800;
 	public static int windowHeight = 600;
+	private int gameFPS = 60;
+	private long beginTime;
+	private long updatePeriod = 1000000000L/60;
 	public ApplicationUI(){
 		Container pane = getContentPane();
 		pane.setLayout(new BorderLayout());
@@ -24,7 +27,7 @@ public class ApplicationUI extends JFrame{
 		ctrl.setGamePanel(drawPanel);
 		this.setFocusable(true);
 		pane.add(drawPanel);
-
+		setFullScreen(false);
 		Thread gameThread = new Thread(){
 			public void run(){
 				gameLoop();
@@ -58,8 +61,26 @@ public class ApplicationUI extends JFrame{
 	 */
 	public void gameLoop(){
 		while(true){
+			beginTime=System.nanoTime();
+			//check keys
+			Controller.checkKeys();
+			//update
+			GamePanel.levels.get(GamePanel.currentLevel).update();
 			//repaint the graphics of the game
 			repaint();
+			//the time taken to do everything with the frame in nanoseconds
+			long timeTaken = System.nanoTime()-beginTime;
+			long timeLeft = (updatePeriod - timeTaken) / 1000000L;; // In milliseconds
+			if(timeTaken<updatePeriod){
+				// If the time is less than 10 milliseconds, then we will put thread to sleep for 10 millisecond so that some other thread can do some work.
+				if (timeLeft < 10){ 
+					timeLeft = 10; //set a minimum
+				}
+				try {
+					//Provides the necessary delay and also yields control so that other thread can do work.
+					Thread.sleep(timeLeft);
+				} catch (InterruptedException ex) { }
+			}
 		}
 	}
 
