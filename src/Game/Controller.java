@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 public class Controller implements KeyListener,MouseListener,MouseMotionListener,MouseWheelListener{
 	private JPanel gamePanel;
 	static boolean mousePressed = false;
+	static Point mousePosition = new Point(0,0);
 	public void setGamePanel(JPanel panelRef) {
 		gamePanel = panelRef;
 		gamePanel.addKeyListener(this);
@@ -33,11 +34,10 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 	}
 
 	public void mouseMoved(MouseEvent e) {
+		mousePosition.x = (int) e.getPoint().getX();
+		mousePosition.y = (int) e.getPoint().getY();
 		// TODO Auto-generated method stub
-		if(mousePressed){
-			GamePanel.player.destination.x=(int) e.getPoint().getX();
-			GamePanel.player.destination.y=(int) e.getPoint().getY();
-		}
+		
 	}
 
 	public void mouseClicked(MouseEvent arg0) {
@@ -58,10 +58,8 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
 		mousePressed = true;
-		if(mousePressed){
-			GamePanel.player.destination.x=(int) e.getPoint().getX();
-			GamePanel.player.destination.y=(int) e.getPoint().getY();
-		}
+		mousePosition.x = (int) e.getPoint().getX();
+		mousePosition.y = (int) e.getPoint().getY();
 	}
 
 	public void mouseReleased(MouseEvent arg0) {
@@ -86,7 +84,10 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 		//check if mouse was pressed
 		if(mousePressed){
 			//Point temp = MouseEvent.getPoint();
-
+			if(mousePressed){
+				GamePanel.player.destination.x=(int)GamePanel.player.xpos+mousePosition.x-((ApplicationUI.windowWidth/2)-16);
+				GamePanel.player.destination.y=(int)GamePanel.player.ypos+mousePosition.y-((ApplicationUI.windowHeight/2)-16);
+			}
 			//System.out.println("destination: "+GamePanel.player.destination.x+","+GamePanel.player.destination.y);
 		}
 	}

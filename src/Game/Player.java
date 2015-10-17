@@ -9,7 +9,7 @@ public class Player extends Entity{
 	Point destination = new Point(0,0);
 	double angleInRadians;
 	double angleInDegrees;
-	double movementSpeed = 1;
+	double movementSpeed = 3;
 	Rectangle collisionBox;
 	public Player(int x, int y){
 		this.xpos = x;
@@ -36,7 +36,7 @@ public class Player extends Entity{
 				if(x1>=0&&x1<GamePanel.levels.get(GamePanel.currentLevel).width&&y1>=0&&y1<GamePanel.levels.get(GamePanel.currentLevel).height){
 					Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
 					if(collisionBoxAtNewXPosition.intersects(temp.collisionBox)&&temp.collisionType==1){
-						GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
+						//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
 						collidedWithSomethingX = true;
 					}
 				}
@@ -47,7 +47,7 @@ public class Player extends Entity{
 				if(x1>=0&&x1<GamePanel.levels.get(GamePanel.currentLevel).width&&y1>=0&&y1<GamePanel.levels.get(GamePanel.currentLevel).height){
 					Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
 					if(collisionBoxAtNewYPosition.intersects(temp.collisionBox)&&temp.collisionType==1){
-						GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
+						//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
 						collidedWithSomethingY = true;
 					}
 				}
@@ -91,7 +91,7 @@ public class Player extends Entity{
 		moveTowardsDestination();
 	}
 	public void Draw(Graphics2D g){
-		g.drawImage(GamePanel.playerImage,(int)xpos,(int)ypos,32,32,null);
+		g.drawImage(GamePanel.playerImage,(ApplicationUI.windowWidth/2)-16,(ApplicationUI.windowHeight/2)-16,32,32,null);
 
 	}
 }
