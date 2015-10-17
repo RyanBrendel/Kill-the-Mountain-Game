@@ -10,6 +10,7 @@ public class Tile {
 	int artX;
 	int artY;
 	boolean flagged = false;
+	Color flagColor = new Color(200,0,0,100);
 	int collisionType = 0;//0 means no collision, 1 means collision
 	Rectangle collisionBox;
 	public Tile(int x, int y, int xID, int yID){
@@ -18,20 +19,20 @@ public class Tile {
 		artX = xID;
 		artY = yID;
 		collisionBox = new Rectangle(x,y,32,32);
-		if(xID==0&&yID==0){//grass
+		if(xID==6&&yID==0){//grass
 			collisionType = 0;
 		}
-		if(xID==2&&yID==0){//water
+		if(xID==3&&yID==0){//water
 			collisionType = 1;
 		}
 		
 	}
 	public void Draw(Graphics2D g){
-		g.drawImage(GamePanel.tiles[artX][artY],xpos,ypos,32,32,null);
-		g.setColor(new Color(200,0,0));
+		g.drawImage(GamePanel.tiles[artX][artY],((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos,32,32,null);
+		g.setColor(flagColor);
 		if(flagged){
-			g.fillRect(collisionBox.x, collisionBox.y, collisionBox.width, collisionBox.height);
-			flagged = false;
+			g.fillRect(((ApplicationUI.windowWidth/2)-16)+xpos-(int)GamePanel.player.xpos,((ApplicationUI.windowHeight/2)-16)+ypos-(int)GamePanel.player.ypos, collisionBox.width, collisionBox.height);
+			//flagged = false;
 		}
 	}
 }

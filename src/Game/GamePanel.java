@@ -10,14 +10,14 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel{
 	private static final long serialVersionUID = 496501089018037548L;
-	public static BufferedImage[][] tiles = FileIO.loadSpriteSheet("/Textures/Tiles.png", 32, 32);
+	public static BufferedImage[][] tiles = FileIO.loadSpriteSheet("/Textures/overlappedTiles.png", 32, 32);
 	public static BufferedImage playerImage = FileIO.loadImage("/Textures/Player.png");
 	public static ArrayList<Level> levels = new ArrayList<Level>();
 	public static MenuButton button = new MenuButton(60,40,"",ApplicationUI.windowWidth - 60 - 30, 30);
 	public static int currentLevel = 0;
 	public static Player player = new Player(0,0);
 	public GamePanel(){
-		levels.add(new Level("Test",30,30));
+		levels.add(new Level("Test"));
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
