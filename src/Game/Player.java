@@ -11,6 +11,27 @@ public class Player extends Entity{
 	double angleInDegrees;
 	double movementSpeed = 3;
 	Rectangle collisionBox;
+	//Stats
+	int level;
+	int strength;
+	int minStrength = 1;
+	int maxStrength = 25;
+	int maxHealth = 100;
+	int currentHealth;
+	double luck;
+	boolean armorOn;
+	boolean isAlive = true;
+	int maxMana = 100;
+	int minMana = 0;
+	int currentMana = 0;
+	double maxSpeed = 3;
+	double minSpeed = 1;
+	double magicResistance;
+	double physicalResistance;
+	double fireResistance;
+	double iceResistance;
+	
+
 	public Player(int x, int y){
 		this.xpos = x;
 		this.ypos = y;
@@ -87,9 +108,83 @@ public class Player extends Entity{
 		}
 		return angle;
 	}
+
 	public void update(){
 		moveTowardsDestination();
 	}
+
+	public void takeDamage(int damage) {
+
+		if (armorOn) {
+			currentHealth-=(int)(damage/2); // will change to damage/armorResistance
+		}
+		
+	}
+
+	public void healthUp(int amount) {
+
+		if (currentHealth+amount > maxHealth) {
+			currentHealth = maxHealth;
+		}
+		else {
+			currentHealth+=amount;
+		}
+	}
+
+	public void speedChange (double amount) {
+
+		if (movementSpeed*amount > maxSpeed) {
+			movementSpeed = maxSpeed;
+		}
+		else if (movementSpeed*amount < minSpeed) {
+			movementSpeed = minSpeed;
+		}
+		else{
+			movementSpeed*=amount;
+		}
+
+	}
+
+	public void manaChange(int amount) {
+
+		if (currentMana+amount > maxMana) {
+			currentMana = maxMana;
+		}
+		else if (currentMana+amount < minMana) {
+			currentMana = minMana;
+		} 
+		else{
+			currentMana+=amount;
+		}
+
+	}
+	
+	public void strengthChange(int amount) {
+		
+		if (strength+amount > maxStrength) {
+			strength = maxStrength;
+		}
+		else if (strength+amount < minStrength) {
+			strength =minStrength;
+		}
+		else {
+			strength+=amount;
+		}
+		
+	}
+
+	public int getMana () {
+		return currentMana;
+	}
+	
+	public int getHealth() {
+		return currentHealth;
+	}
+	
+	public int getStrength() {
+		return strength;
+	}
+
 	public void Draw(Graphics2D g){
 		g.drawImage(GamePanel.playerImage,(ApplicationUI.windowWidth/2)-16,(ApplicationUI.windowHeight/2)-16,32,32,null);
 
