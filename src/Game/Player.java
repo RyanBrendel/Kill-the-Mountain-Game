@@ -2,6 +2,7 @@ package Game;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 public class Player extends Entity{
 	Inventory inventory = new Inventory();
@@ -9,19 +10,57 @@ public class Player extends Entity{
 	double angleInRadians;
 	double angleInDegrees;
 	double movementSpeed = 1;
+	Rectangle collisionBox;
 	public Player(int x, int y){
 		this.xpos = x;
 		this.ypos = y;
+		collisionBox = new Rectangle(x,y,32,32);
 	}
 	public void moveTowardsDestination(){
-		
+
 		if(!atDestination()){
 			//find angle between current position and destination
 			angleInDegrees = getAngleToDestination();
 			angleInRadians = Math.toRadians(angleInDegrees);
 			//move towards destination
-			xpos+=movementSpeed*Math.cos(angleInRadians);
-			ypos+=movementSpeed*Math.sin(angleInRadians);
+			setPosition(xpos+(movementSpeed*Math.cos(angleInRadians)),ypos+(movementSpeed*Math.sin(angleInRadians)));
+		}
+	}
+	public void setPosition(double x, double y){
+		Rectangle collisionBoxAtNewXPosition = new Rectangle((int)x,(int)ypos,32,32);
+		Rectangle collisionBoxAtNewYPosition = new Rectangle((int)xpos,(int)y,32,32);
+		boolean collidedWithSomethingX = false;
+		boolean collidedWithSomethingY = false;
+		for(int x1 = (int)(xpos/32)-((int)movementSpeed+1);x1<(int)(xpos/32)+(int)movementSpeed+1;x1++){
+			for(int y1 = (int)(ypos/32)-((int)movementSpeed+1);y1<(int)(ypos/32)+(int)movementSpeed+1;y1++){
+				if(x1>=0&&x1<GamePanel.levels.get(GamePanel.currentLevel).width&&y1>=0&&y1<GamePanel.levels.get(GamePanel.currentLevel).height){
+					Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
+					if(collisionBoxAtNewXPosition.intersects(temp.collisionBox)&&temp.collisionType==1){
+						GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
+						collidedWithSomethingX = true;
+					}
+				}
+			}
+		}
+		for(int x1 = (int)(xpos/32)-((int)movementSpeed+1);x1<(int)(xpos/32)+(int)movementSpeed+1;x1++){
+			for(int y1 = (int)(ypos/32)-((int)movementSpeed+1);y1<(int)(ypos/32)+(int)movementSpeed+1;y1++){
+				if(x1>=0&&x1<GamePanel.levels.get(GamePanel.currentLevel).width&&y1>=0&&y1<GamePanel.levels.get(GamePanel.currentLevel).height){
+					Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
+					if(collisionBoxAtNewYPosition.intersects(temp.collisionBox)&&temp.collisionType==1){
+						GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
+						collidedWithSomethingY = true;
+					}
+				}
+			}
+		}
+		//if player is going to collide with the tile at their future position
+		if(collidedWithSomethingX==false){
+			xpos = x;
+			collisionBox.x=(int)xpos;
+		}
+		if(collidedWithSomethingY==false){
+			ypos = y;
+			collisionBox.y=(int)ypos;
 		}
 	}
 	/*
@@ -31,8 +70,7 @@ public class Player extends Entity{
 	 */
 	public boolean atDestination(){
 		if(Math.abs(xpos-destination.x)<=movementSpeed&&Math.abs(ypos-destination.y)<=movementSpeed){
-			xpos = destination.x;
-			ypos = destination.y;
+			setPosition(destination.x,destination.y);
 			return true;
 		}
 		return false;
@@ -54,5 +92,6 @@ public class Player extends Entity{
 	}
 	public void Draw(Graphics2D g){
 		g.drawImage(GamePanel.playerImage,(int)xpos,(int)ypos,32,32,null);
+
 	}
 }
