@@ -13,45 +13,67 @@ public class Level {
 	String name;
 	Random levelGenerationRandom;
 	int seed;
+	LevelMap map;
+	ArrayList<ArrayList<Tile>> lakes = new ArrayList<ArrayList<Tile>>();
 	public Level(String Name){
 
 		name = Name;
 		if(name.equals("Test")){
-			seed = 13;
+			seed = 135;
 			width = 100;
 			height = 100;
 		}
 		tileMap = new Tile[width][height];
-		levelGenerationRandom = new Random(seed);
+		
 		generateMap();
+		
 	}
 	public void generateMap(){
-		//initialize the map
+		levelGenerationRandom = new Random(seed);
+		//initialize the tile map
 		for(int x = 0; x<width;x++){
 			for(int y = 0; y<height; y++){
-				tileMap[x][y]=new Tile(x*32,y*32,6,0);//everything is grass
-
+				//tileMap[x][y]=new Tile(x*32,y*32,6,0);//everything is grass
+				tileMap[x][y]=new Tile(x*32,y*32,3,0);//everything is water
 			}
 		}
-		int lakeCount = randomNumber(2,15);
-		for(int i = 0; i<lakeCount; i++){
-			generateLake(randomNumber(200,2000));
+		//create islands
+		int islandCount = randomNumber(2,15);
+		for(int i = 0; i<islandCount; i++){
+			generateLakeOrIsland(randomNumber(220,2550), false);
 		}
-
+		//create lakes
+		int lakeCount = randomNumber(2,3);
+		for(int i = 0; i<lakeCount; i++){
+			generateLakeOrIsland(randomNumber(120,500), true);
+		}
+		//create the map
+		map = new LevelMap(tileMap);
 	}
-	public void generateLake(int lakeSize){
+	public void generateLakeOrIsland(int lakeSize, boolean isLake){
+		Point createdTileID;
+		Point replacedTileID;
+		if(isLake){
+			createdTileID=new Point(3,0);
+			replacedTileID = new Point(6,0);
+		}
+		else{
+			createdTileID = new Point(6,0);
+			replacedTileID = new Point(3,0);
+		}
 		//add randomly placed water
 		Point lakePosition = new Point(randomNumber(0,width-1),randomNumber(0,height-1));
-		ArrayList<Point> lakeEdges = new ArrayList<Point>();
-		lakeEdges.add(lakePosition);
-		tileMap[lakePosition.x][lakePosition.y]=new Tile(lakePosition.x*32,lakePosition.y*32,3,0);
+		ArrayList<Tile> lakeEdges = new ArrayList<Tile>();
+		lakeEdges.add(tileMap[lakePosition.x][lakePosition.y]);
+		tileMap[lakePosition.x][lakePosition.y]=new Tile(lakePosition.x*32,lakePosition.y*32,createdTileID.x,createdTileID.y);
 		int count = 0;
 		//generate water
 		while(count<lakeSize){
 			//pick a random side of this tile
 			boolean changed = false;
 			while(!changed){
-				Point randEdge = lakeEdges.get(randomNumber(0,lakeEdges.size()-1));
+				Tile randTile = lakeEdges.get(randomNumber(0,lakeEdges.size()-1));
+				Point randEdge = new Point(randTile.xpos/32,randTile.ypos/32);
 				lakePosition = new Point(randEdge.x,randEdge.y);
 				int side = randomNumber(1,4);
 				//top
@@ -76,14 +98,14 @@ public class Level {
 				}
 			}
 			//if the tile chosen is not already a water tile
-			if(!(tileMap[lakePosition.x][lakePosition.y].artX==2&&tileMap[lakePosition.x][lakePosition.y].artY==0)){
-				tileMap[lakePosition.x][lakePosition.y]=new Tile(lakePosition.x*32,lakePosition.y*32,3,0);//random bits of water
+			if(!(tileMap[lakePosition.x][lakePosition.y].artX==createdTileID.x&&tileMap[lakePosition.x][lakePosition.y].artY==createdTileID.y)){
+				tileMap[lakePosition.x][lakePosition.y]=new Tile(lakePosition.x*32,lakePosition.y*32,createdTileID.x,createdTileID.y);//random bits of water
 				count++;
 				//get a list of all the water tiles which are adjacent to this one
-				ArrayList<Tile> adjacentTiles = tilesAdjacentToPosition(lakePosition.x,lakePosition.y,3,0);
+				ArrayList<Tile> adjacentTiles = tilesAdjacentToPosition(lakePosition.x,lakePosition.y,createdTileID.x,createdTileID.y);
 				//if there is a non water tile adjacent to this
 				if(adjacentTiles.size()!=4){
-					lakeEdges.add(new Point(lakePosition.x,lakePosition.y));
+					lakeEdges.add(tileMap[lakePosition.x][lakePosition.y]);
 				}
 				//remove any water tiles from the list of edge tiles which are no longer on an edge
 				for(int i = 0; i<adjacentTiles.size();i++){
@@ -93,22 +115,27 @@ public class Level {
 					}
 				}
 			}
+			else{
+				if(randomNumber(1,10)==1){
+					count++;
+				}
+			}
 		}
 		//generate shore
 		for(int i = 0; i<lakeEdges.size();i++){
 			//tileMap[lakeEdges.get(i).x][lakeEdges.get(i).y].flagged=true;
 			//tileMap[lakeEdges.get(i).x][lakeEdges.get(i).y].flagColor=new Color(200,0,0,100);
 			//list of all the adjacent grass tiles to this water tile
-			ArrayList<Tile> adjacentNonWaterTiles = tilesAdjacentToPosition(lakeEdges.get(i).x,lakeEdges.get(i).y,6,0);
+			ArrayList<Tile> adjacentNonWaterTiles = tilesAdjacentToPosition(lakeEdges.get(i).xpos/32,lakeEdges.get(i).ypos/32,replacedTileID.x,replacedTileID.y);
 			//make all adjacent grass into dirt
 			for(int j = 0; j<adjacentNonWaterTiles.size();j++){
-
 				int x = adjacentNonWaterTiles.get(j).xpos;
 				int y = adjacentNonWaterTiles.get(j).ypos;
 				tileMap[x/32][y/32].flagged=true;
 				tileMap[x/32][y/32]= new Tile(x,y,7,0);
 			}
 		}
+		
 	}
 	/*
 	 * Used to determine how many of the specified tile type is adjacent to a position
@@ -160,9 +187,12 @@ public class Level {
 		GamePanel.player.update();
 	}
 	public void Draw(Graphics2D g){
-		for(int x = 0; x<width;x++){
-			for(int y = 0; y<height; y++){
-				tileMap[x][y].Draw(g);
+		int viewDistanceX = ((ApplicationUI.windowWidth/32)/2)+2;
+		int viewDistanceY = ((ApplicationUI.windowHeight/32)/2)+2;
+		for(int x = (int)(GamePanel.player.xpos/32)-(viewDistanceX); x<(int)(GamePanel.player.xpos/32)+(viewDistanceX);x++){
+			for(int y = (int)(GamePanel.player.ypos/32)-(viewDistanceY); y<(int)(GamePanel.player.ypos/32)+(viewDistanceY);y++){
+				if(x>=0&&y>=0&&x<width&&y<height)
+					tileMap[x][y].Draw(g);
 			}
 		}
 		GamePanel.player.Draw(g);
