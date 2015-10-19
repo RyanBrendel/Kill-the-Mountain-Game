@@ -61,8 +61,8 @@ public class ApplicationUI extends JFrame{
 	 */
 	public void gameLoop(){
 		while(true){
-			windowWidth = this.getWidth();
-			windowHeight = this.getHeight();
+			windowWidth = getWidth();
+			windowHeight = getHeight();
 			beginTime=System.nanoTime();
 			//check keys
 			Controller.checkKeys();

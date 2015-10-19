@@ -30,7 +30,7 @@ public class Player extends Entity{
 	double physicalResistance;
 	double fireResistance;
 	double iceResistance;
-	
+
 
 	public Player(int x, int y){
 		this.xpos = x;
@@ -40,11 +40,17 @@ public class Player extends Entity{
 	public void moveTowardsDestination(){
 
 		if(!atDestination()){
-			//find angle between current position and destination
-			angleInDegrees = getAngleToDestination();
-			angleInRadians = Math.toRadians(angleInDegrees);
-			//move towards destination
-			setPosition(xpos+(movementSpeed*Math.cos(angleInRadians)),ypos+(movementSpeed*Math.sin(angleInRadians)));
+			if(GamePanel.godmode==false){
+				//find angle between current position and destination
+				angleInDegrees = getAngleToDestination();
+				angleInRadians = Math.toRadians(angleInDegrees);
+				//move towards destination
+				setPosition(xpos+(movementSpeed*Math.cos(angleInRadians)),ypos+(movementSpeed*Math.sin(angleInRadians)));
+			}
+			else{
+				//xpos = destination.x;
+				//ypos = destination.y;
+			}
 		}
 	}
 	public void setPosition(double x, double y){
@@ -118,7 +124,7 @@ public class Player extends Entity{
 		if (armorOn) {
 			currentHealth-=(int)(damage/2); // will change to damage/armorResistance
 		}
-		
+
 	}
 
 	public void healthUp(int amount) {
@@ -158,9 +164,9 @@ public class Player extends Entity{
 		}
 
 	}
-	
+
 	public void strengthChange(int amount) {
-		
+
 		if (strength+amount > maxStrength) {
 			strength = maxStrength;
 		}
@@ -170,17 +176,17 @@ public class Player extends Entity{
 		else {
 			strength+=amount;
 		}
-		
+
 	}
 
 	public int getMana () {
 		return currentMana;
 	}
-	
+
 	public int getHealth() {
 		return currentHealth;
 	}
-	
+
 	public int getStrength() {
 		return strength;
 	}

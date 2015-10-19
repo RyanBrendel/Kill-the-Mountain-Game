@@ -28,16 +28,16 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 
 	}
 
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void mouseDragged(MouseEvent e) {
+		mousePosition.x = (int) e.getPoint().getX();
+		mousePosition.y = (int) e.getPoint().getY();
 	}
 
 	public void mouseMoved(MouseEvent e) {
 		mousePosition.x = (int) e.getPoint().getX();
 		mousePosition.y = (int) e.getPoint().getY();
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void mouseClicked(MouseEvent arg0) {
@@ -68,7 +68,32 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 	}
 
 	public void keyPressed(KeyEvent e) {
-
+		if(e.getKeyCode()==KeyEvent.VK_M){
+			if(GamePanel.showMap){
+				GamePanel.showMap=false;
+			}
+			else{
+				GamePanel.showMap=true;
+			}
+		}
+		if(e.getKeyCode()==KeyEvent.VK_G){
+			if(GamePanel.godmode){
+				GamePanel.godmode=false;
+			}
+			else{
+				GamePanel.godmode=true;
+			}
+		}
+		if(GamePanel.godmode){
+			if(e.getKeyCode()==KeyEvent.VK_UP){
+				GamePanel.levels.get(GamePanel.currentLevel).seed++;
+				GamePanel.levels.get(GamePanel.currentLevel).generateMap();
+			}
+			if(e.getKeyCode()==KeyEvent.VK_DOWN){
+				GamePanel.levels.get(GamePanel.currentLevel).seed--;
+				GamePanel.levels.get(GamePanel.currentLevel).generateMap();
+			}
+		}
 	}
 
 	public void keyReleased(KeyEvent arg0) {
@@ -76,8 +101,8 @@ public class Controller implements KeyListener,MouseListener,MouseMotionListener
 
 	}
 
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public void keyTyped(KeyEvent e) {
+
 
 	}
 	public static void checkKeys(){
