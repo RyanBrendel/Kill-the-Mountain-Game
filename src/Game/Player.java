@@ -62,7 +62,7 @@ public class Player extends Entity{
 			for(int y1 = (int)(ypos/32)-((int)movementSpeed+1);y1<(int)(ypos/32)+(int)movementSpeed+1;y1++){
 				if(x1>=0&&x1<GamePanel.levels.get(GamePanel.currentLevel).width&&y1>=0&&y1<GamePanel.levels.get(GamePanel.currentLevel).height){
 					Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
-					if(collisionBoxAtNewXPosition.intersects(temp.collisionBox)&&temp.collisionType==1){
+					if(collisionBoxAtNewXPosition.intersects(temp.collisionBox)&&temp.collisionType>=1){
 						//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
 						collidedWithSomethingX = true;
 					}
@@ -73,7 +73,7 @@ public class Player extends Entity{
 			for(int y1 = (int)(ypos/32)-((int)movementSpeed+1);y1<(int)(ypos/32)+(int)movementSpeed+1;y1++){
 				if(x1>=0&&x1<GamePanel.levels.get(GamePanel.currentLevel).width&&y1>=0&&y1<GamePanel.levels.get(GamePanel.currentLevel).height){
 					Tile temp = GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1];
-					if(collisionBoxAtNewYPosition.intersects(temp.collisionBox)&&temp.collisionType==1){
+					if(collisionBoxAtNewYPosition.intersects(temp.collisionBox)&&temp.collisionType>=1){
 						//GamePanel.levels.get(GamePanel.currentLevel).tileMap[x1][y1].flagged=true;
 						collidedWithSomethingY = true;
 					}

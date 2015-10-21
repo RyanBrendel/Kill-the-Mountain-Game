@@ -13,17 +13,76 @@ public class Tile {
 	Color flagColor = new Color(200,0,0,100);
 	int collisionType = 0;//0 means no collision, 1 means collision
 	Rectangle collisionBox;
+	
+	public int getXpos()
+	{
+		return this.xpos;
+	}
+	public int getYpos()
+	{
+		return this.ypos;
+	}
+	public void setXpos(int x)
+	{
+		this.xpos = x;
+	}
+	public void setYpos(int y)
+	{
+		this.ypos = y;
+	}
+	public int getArtX()
+	{
+		return this.artX;
+	}
+	public int getArtY()
+	{
+		return this.artY;
+	}
+	public void setArtX(int x)
+	{
+		this.artX = x;
+	}
+	public void setArtY(int y)
+	{
+		this.artY = y;
+	}
+	public boolean isFlagged()
+	{
+		return this.flagged;
+	}
+	public void setFlagged(boolean bool)
+	{
+		this.flagged = bool;
+	}
+	
+	
 	public Tile(int x, int y, int xID, int yID){
-		xpos = x;
-		ypos = y;
+		xpos = x*32;
+		ypos = y*32;
 		artX = xID;
 		artY = yID;
-		collisionBox = new Rectangle(x,y,32,32);
+		collisionBox = new Rectangle(xpos,ypos,32,32);
 		if(xID==6&&yID==0){//grass
 			collisionType = 0;
 		}
 		if(xID==3&&yID==0){//water
 			collisionType = 1;
+		}
+		else if(xID == 1 && yID == 0)//stone wall edge
+		{
+			collisionType = 2;
+		}
+		else if(xID == 1 && yID == 1)//stone wall fill
+		{
+			collisionType = 2;
+		}
+		else if(xID == 8 && yID == 2)//tree canopy
+		{
+			collisionType = 2;
+		}
+		else if(xID == 8 && yID == 1)//tree flush top
+		{
+			collisionType = 2;
 		}
 		
 	}
