@@ -17,16 +17,26 @@ public class GamePanel extends JPanel{
 	public static ArrayList<Level> levels = new ArrayList<Level>();
 	public static MenuButton button;
 	public static int currentLevel = 0;
-	public static Player player = new Player(0,0);
+	public static Player player = new Player(200,200);
 	public static boolean showMap = false;
 	public static boolean godmode = false;
 	public GamePanel(){
 		button = new MenuButton(60,40,"",ApplicationUI.windowWidth - 60 - 30, 30);
-		levels.add(new Level("Test"));
+		Level testLevel = new Level("Test");
+		levels.add(testLevel);
+		testLevel.updateTileMapArt();
+		
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Draw((Graphics2D)g);
+	}
+	public static void setCurrentLevel(Level lvl){
+		for(int i = 0; i<levels.size();i++){
+			if(levels.get(i)==lvl){
+				currentLevel = i;
+			}
+		}
 	}
 	public void Draw(Graphics2D g){
 		levels.get(currentLevel).Draw(g);

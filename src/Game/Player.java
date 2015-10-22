@@ -40,17 +40,14 @@ public class Player extends Entity{
 	public void moveTowardsDestination(){
 
 		if(!atDestination()){
-			if(GamePanel.godmode==false){
-				//find angle between current position and destination
-				angleInDegrees = getAngleToDestination();
-				angleInRadians = Math.toRadians(angleInDegrees);
-				//move towards destination
-				setPosition(xpos+(movementSpeed*Math.cos(angleInRadians)),ypos+(movementSpeed*Math.sin(angleInRadians)));
-			}
-			else{
-				//xpos = destination.x;
-				//ypos = destination.y;
-			}
+
+			//find angle between current position and destination
+			angleInDegrees = getAngleToDestination();
+			angleInRadians = Math.toRadians(angleInDegrees);
+			//move towards destination
+			setPosition(xpos+(movementSpeed*Math.cos(angleInRadians)),ypos+(movementSpeed*Math.sin(angleInRadians)));
+
+
 		}
 	}
 	public void setPosition(double x, double y){
@@ -81,11 +78,11 @@ public class Player extends Entity{
 			}
 		}
 		//if player is going to collide with the tile at their future position
-		if(collidedWithSomethingX==false){
+		if(collidedWithSomethingX==false||GamePanel.godmode){
 			xpos = x;
 			collisionBox.x=(int)xpos;
 		}
-		if(collidedWithSomethingY==false){
+		if(collidedWithSomethingY==false||GamePanel.godmode){
 			ypos = y;
 			collisionBox.y=(int)ypos;
 		}
