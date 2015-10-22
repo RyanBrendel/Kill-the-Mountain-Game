@@ -1,6 +1,6 @@
 package Game;
 
-public class Monster extends Entity{
+public class Monster extends CombatEntity{
 	public Monster(){
 		
 	}

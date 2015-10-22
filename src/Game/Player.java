@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-public class Player extends Entity{
+public class Player extends CombatEntity{
 	Inventory inventory = new Inventory();
 	Point destination = new Point(0,0);
 	double angleInRadians;
