@@ -21,7 +21,7 @@ public class GamePanel extends JPanel{
 	public static boolean showMap = false;
 	public static boolean godmode = false;
 	public GamePanel(){
-		button = new MenuButton(60,40,"",ApplicationUI.windowWidth - 60 - 30, 30);
+		//button = new MenuButton(60,40,"",ApplicationUI.windowWidth - 60 - 30, 30);
 		levels.add(new Level("Test"));
 	}
 	public void paintComponent(Graphics g) {
@@ -30,7 +30,7 @@ public class GamePanel extends JPanel{
 	}
 	public void Draw(Graphics2D g){
 		levels.get(currentLevel).Draw(g);
-		button.Draw(g);
+		//button.Draw(g);
 		if(showMap){
 			levels.get(currentLevel).map.Draw(g);
 		}
